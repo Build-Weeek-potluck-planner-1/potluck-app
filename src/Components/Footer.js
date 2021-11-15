@@ -11,6 +11,10 @@ const StyledList = styled.ul`
     list-style-type: none;
     display: flex;
     justify-content: center;
+    background-color: green;
+    margin: 0px;
+    height: 10vh;
+
 `
 
 const StyledLink = styled.li`

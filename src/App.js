@@ -8,6 +8,7 @@ import { Route, Switch } from 'react-router-dom';
 import axios from "axios";
 import formSchema from './validation/formSchema';
 import * as yup from 'yup';
+import LoginForm from './Components/Login';
 
 
 // Form Value Setup
@@ -100,7 +101,15 @@ function App() {
           />
         </Route>
         
-        <Route path='/login'></Route>
+        <Route path='/login'>
+        <LoginForm 
+            formValues={formValues}
+            inputChange={inputChange}
+            formSubmit={formSubmit}
+            disabled={disabled}
+            formErrors={formErrors}
+          />
+        </Route>
 
         <Route path='/'>
           <Middle />

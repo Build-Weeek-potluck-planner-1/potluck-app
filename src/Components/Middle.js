@@ -35,7 +35,7 @@ const Middle = () => {
   .button-homepage:hover {
     opacity: 80%;
     border:2px black solid;
-    color: red;
+    color: green;
   }
   `
 

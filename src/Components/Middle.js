@@ -12,23 +12,24 @@ const Middle = () => {
   .left {
     display:flex;
     flex-direction: column;
-    width: 45%; 
+    width: 50%; 
     justify-content: center;
     align-items: center;
   }
   .left h3 {
     text-decoration: none;
     font-size: 15px;
+    width: 75%;
   }
   .right {
     width: 50%;
   }
   .right img {
-    width: 40vw;
+    width: 100%;
   }
   .button-homepage {
     margin-top: 7%;
-    width: 20%;
+    width: 13%;
     padding: 1%;
     border-radius: 10px;
   }

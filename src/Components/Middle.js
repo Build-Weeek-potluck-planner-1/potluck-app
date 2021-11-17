@@ -12,9 +12,10 @@ const Middle = () => {
   .left {
     display:flex;
     flex-direction: column;
-    width: 45%; 
+    width: 50%; 
     justify-content: center;
     align-items: center;
+    margin-left:2%;
   }
   .left h1 {
     font-size: 48px;
@@ -27,7 +28,7 @@ const Middle = () => {
     width: 50%;
   }
   .right img {
-    width: 40vw;
+    width: 90%;
   }
   .button-homepage {
     margin-top: 50%;
@@ -42,6 +43,8 @@ const Middle = () => {
   .button-homepage:hover {
     /* opacity: 80%; */
     border:2px black solid;
+    background-color:white;
+    color:green;
   }
   `
 

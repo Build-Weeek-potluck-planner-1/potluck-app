@@ -1,36 +1,31 @@
 import { React, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import axiosWithAuth from '../utils/axiosWithAuth';
 import { v4 as uuidv4 } from 'uuid';
 import image from '../Images/addEventFormImg.jpeg';
 
 const initialEventData = { // formerly "initialFormValues"
-    eventName: "",
-    date: "",
-    foodList: [],
-    time: "",
-    location: "",
-    guestList: [] // formerly "email"
+    "event_name": "",
+    "event_date": "",
+    "event_time": "",
+    "event_location": ""
 };
 
 const AddEventForm = (props) => {
-    const { eventsList, setEventsList } = props; // formerly "events"
-    const [eventData, setEventData] = useState(initialEventData); // formerly "formValues"
-    // const [list, setList] = useState(); // now storing foods list inside eventData
-    // const [name, setName] = useState(''); // this is now in eventData
+    const { eventsList, setEventsList } = props; 
+    const [eventData, setEventData] = useState(initialEventData); 
+    const history = useHistory();
 
-    const addEvent = () => { // formerly "postNewEvent"
-        axiosWithAuth() // this function contains a "baseURL" of "https://potluckplanner2.herokuapp.com/api", so whatever's below will append onto "baseURL"
+    const addEvent = () => { 
+        axiosWithAuth()
             .post('/events', eventData)
-            .then(res => { // retrieve data of added event, 
+            .then(res => { 
                 const newEvent = res.data;
-                // add event to local events list in App state
                 setEventsList([...eventsList, newEvent]);
-                // instead of resetting the form, we'll redirect to the display page for the event we just added
-                return <Redirect to={`/events/${newEvent.id}`} />
+                history.push('/events');
             })
-            .catch(err => console.error(err))
+            .catch(err => console.error(err.response))
     };
 
     const onSubmit = event => { // now does job of onSubmit and formSubmit
@@ -39,22 +34,16 @@ const AddEventForm = (props) => {
         addEvent(eventData);
     };
 
-    // const inputChange = (name, value) => {
-    //     //validate(name, value);
-    //     setEventsList({ ...eventData, [name]: value });
-    // };
-
-    const onChange = event => {
-        // const realValue = (type) === 'checkbox' ? checked : value;
+    const onChange = e => {
         setEventData({
             ...eventData,
-            [event.target.name]: event.target.value
+            [e.target.name]: e.target.value
         });
+        console.log(eventData)
     };
 
     // Food List
-    // const initialFoodList = []; // foodList is now in eventData
-    // const [foodList, setFoodList] = useState(initialFoodList);
+    const [foodList, setFoodList] = useState([]);
     const [foodName, setFoodName] = useState('');
 
     const handleChangeFood = (event) => {
@@ -64,20 +53,15 @@ const AddEventForm = (props) => {
 
     const handleAddFood = () => {
         //add item
-        const newFoodList = eventData.foodList.concat({ foodName, id: uuidv4() });
+        const newFoodList = foodList.concat({ foodName, id: uuidv4() });
 
-        setEventData({ // formerly "setFoodList"
-            ...eventData,
-            foodList: newFoodList
-        });
+        setFoodList(newFoodList);
 
         setFoodName('');
     }
 
     // Guest List
-    // const initialGuestList = [];
-    // const [guestList, setGuestList] = useState(initialGuestList);
-    //
+    const [guestList, setGuestList] = useState([]);
     const [guestName, setGuestName] = useState('');
 
     const handleChangeGuest = (event) => {
@@ -88,16 +72,13 @@ const AddEventForm = (props) => {
     const handleAddGuest = () => {
         //add item
         // const newGuestList = guestList.concat([{ guestName, id: uuidv4() }]);
-        setEventData({
-            ...eventData,
-            guestList: [
-                ...eventData.guestList,
-                { 
-                    guestName: guestName,
-                    id: uuidv4()
-                }
-            ]
-        });
+        setGuestList([
+            ...guestList,
+            {
+                guestName: guestName,
+                id: uuidv4()
+            }
+        ]);
 
         setGuestName('');
     }
@@ -116,8 +97,8 @@ const AddEventForm = (props) => {
                             <input
                                 type="text"
                                 id="eventName"
-                                name="eventName"
-                                value={eventData.eventName}
+                                name="event_name"
+                                value={eventData.event_name}
                                 required
                                 onChange={onChange}
                                 placeholder="Event Name"
@@ -125,20 +106,20 @@ const AddEventForm = (props) => {
                         </label>
                         <label>Date&nbsp;
                             <input
-                                type="date"
+                                type="text"
                                 id="date"
-                                name="date"
-                                value={eventData.date}
+                                name="event_date"
+                                value={eventData.event_date}
                                 required
                                 onChange={onChange}
                             />
                         </label>
                         <label>Time&nbsp;
                             <input
-                                type="time"
+                                type="text"
                                 id="time"
-                                name="time"
-                                value={eventData.time}
+                                name="event_time"
+                                value={eventData.event_time}
                                 onChange={onChange}
                             />
                         </label>
@@ -146,8 +127,8 @@ const AddEventForm = (props) => {
                             <input
                                 type="text"
                                 id="location"
-                                name="location"
-                                value={eventData.location}
+                                name="event_location"
+                                value={eventData.event_location}
                                 onChange={onChange}
                                 placeholder="Location"
                             />
@@ -164,7 +145,7 @@ const AddEventForm = (props) => {
                                 </button>
                             </div>
                             <div>
-                                {eventData.foodList.map((item) => (
+                                {foodList.map((item) => (
                                     <li key={item.id}>{item.foodName}</li>
                                 ))}
                             </div>
@@ -176,12 +157,13 @@ const AddEventForm = (props) => {
                                 <p>Enter a guest's PotluckPlanner username, then click the button to add them to the guest list.</p>
                                 <p id="note"><i>NOTE: </i>You must enter their username correctly, otherwise they will not receive their invitation.</p>
                                 <input type="text" value={guestName} onChange={handleChangeGuest} placeholder="Username" />
+
                                 <button type="button" onClick={handleAddGuest}>
                                     Add guest
                                 </button>
                             </div>
                             <div>
-                                {eventData.guestList.map((item) => (
+                                {guestList.map((item) => (
                                     <li key={item.id}>{item.guestName}</li>
                                 ))}
                             </div>

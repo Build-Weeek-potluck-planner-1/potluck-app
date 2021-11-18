@@ -60,7 +60,7 @@ function App() {
 
           <Route path='/event-accepted' component={PickFood}></Route>
 
-          <Route path='/your-events' component={YourEvents}></Route>
+          {/* <Route path='/your-events' component={YourEvents}></Route> */}
 
           <PrivateRoute path='/your-events' component={YourEvents}></PrivateRoute>
 
